@@ -30,6 +30,7 @@
         <div class="user-controls">
             <button id="run-workflow" class="btn btn-primary"><i class="fas fa-play"></i> Run</button>
             <button id="stop-workflow" class="btn btn-danger" disabled><i class="fas fa-stop"></i> Stop</button>
+            <input type="file" id="project-file-input" accept=".json" style="display: none;">
         </div>
     </header>
 
@@ -136,6 +137,93 @@
             <span class="close">&times;</span>
             <h2 id="component-info-title"></h2>
             <div id="component-info-content"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="component-config-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Component Configuration</h2>
+            <div id="component-config-form"></div>
+            <div class="modal-footer">
+                <button id="save-component-config" class="btn btn-primary">Save Changes</button>
+                <button id="cancel-component-config" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="export-controls">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown">
+                Export
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" onclick="showExportModal('project')">Export Project</a>
+                <a class="dropdown-item" href="#" onclick="showExportModal('workflow')">Export Workflow</a>
+                <a class="dropdown-item" href="#" onclick="showExportModal('model')">Export Model</a>
+                <a class="dropdown-item" href="#" onclick="showExportModal('dataset')">Export Dataset</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="export-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Export <span id="export-type-title"></span></h2>
+            <div class="export-form">
+                <div class="form-group">
+                    <label for="export-format">Export Format:</label>
+                    <select id="export-format" class="form-control">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div id="export-options" class="form-group">
+                    <div id="model-export-options" style="display: none;">
+                        <label for="selected-model">Select Model:</label>
+                        <select id="selected-model" class="form-control"></select>
+                    </div>
+                    <div id="dataset-export-options" style="display: none;">
+                        <label for="selected-dataset">Select Dataset:</label>
+                        <select id="selected-dataset" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="export-button" class="btn btn-primary">Export</button>
+                <button class="btn btn-secondary" onclick="hideExportModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content help-modal-content">
+            <span class="close">&times;</span>
+            <div class="help-header">
+                <h2>ML Sandbox Help</h2>
+                <div class="help-search-container">
+                    <input type="text" id="help-search" placeholder="Search help topics...">
+                    <button 
+                        type="button"
+                        title="Search help topics"
+                        aria-label="Search help topics"
+                        onclick="helpSystem.searchHelp(document.getElementById('help-search').value)">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <span class="sr-only">Search</span>
+                    </button>
+                </div>
+            </div>
+            <div class="help-navigation">
+                <button onclick="helpSystem.displayTopicsList()">
+                    <i class="fas fa-home"></i> Topics
+                </button>
+                <button onclick="window.open('https://docs.mlsandbox.com', '_blank')">
+                    <i class="fas fa-book"></i> Documentation
+                </button>
+            </div>
+            <div id="help-content" class="help-content">
+                <!-- Content will be dynamically populated -->
+            </div>
         </div>
     </div>
 

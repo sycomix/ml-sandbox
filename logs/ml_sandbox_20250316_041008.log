@@ -1,0 +1,22 @@
+2025-03-16 04:10:08,670 - ml_sandbox.error_handler - INFO - Error handler initialized
+2025-03-16 04:10:08,686 - werkzeug - WARNING -  * Debugger is active!
+2025-03-16 04:10:08,711 - werkzeug - INFO -  * Debugger PIN: 149-550-199
+2025-03-16 04:10:10,392 - werkzeug - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-03-16 04:10:10,392 - werkzeug - INFO -  * Running on http://192.168.1.209:5000/ (Press CTRL+C to quit)
+2025-03-16 04:12:34,656 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "GET / HTTP/1.1" 200 -
+2025-03-16 04:12:34,954 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "[36mGET /static/js/ui.js HTTP/1.1[0m" 304 -
+2025-03-16 04:12:34,967 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-03-16 04:12:34,968 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "[36mGET /static/js/visualization.js HTTP/1.1[0m" 304 -
+2025-03-16 04:12:34,971 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "[36mGET /static/js/workflow.js HTTP/1.1[0m" 304 -
+2025-03-16 04:12:34,972 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "GET /static/css/styles.css HTTP/1.1" 200 -
+2025-03-16 04:12:34,973 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:34] "[36mGET /static/js/components.js HTTP/1.1[0m" 304 -
+2025-03-16 04:12:35,036 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /api/components HTTP/1.1" 200 -
+2025-03-16 04:12:35,037 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /socket.io/?EIO=4&transport=polling&t=PMUEVlN HTTP/1.1" 200 -
+2025-03-16 04:12:35,038 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /api/models HTTP/1.1" 200 -
+2025-03-16 04:12:35,054 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /api/datasets HTTP/1.1" 200 -
+2025-03-16 04:12:35,057 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "POST /socket.io/?EIO=4&transport=polling&t=PMUEVle&sid=-HyxRGWI9GuXTvV7AAAA HTTP/1.1" 200 -
+2025-03-16 04:12:35,059 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /socket.io/?EIO=4&transport=polling&t=PMUEVlf&sid=-HyxRGWI9GuXTvV7AAAA HTTP/1.1" 200 -
+2025-03-16 04:12:35,060 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-16 04:12:35,065 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:12:35] "GET /socket.io/?EIO=4&transport=polling&t=PMUEVls&sid=-HyxRGWI9GuXTvV7AAAA HTTP/1.1" 200 -
+2025-03-16 04:13:03,711 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 04:13:03] "GET /socket.io/?EIO=4&transport=websocket&sid=-HyxRGWI9GuXTvV7AAAA HTTP/1.1" 200 -

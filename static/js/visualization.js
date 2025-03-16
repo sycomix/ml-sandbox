@@ -30,6 +30,42 @@ class Visualization {
      * @param {string} lossCanvasId - ID of loss chart canvas
      */
     initTrainingCharts(accuracyCanvasId = 'accuracy-chart', lossCanvasId = 'loss-chart') {
+        const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+        const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        const textColor = isDarkMode ? '#e9ecef' : '#333';
+
+        const chartConfig = {
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: {
+                            color: gridColor
+                        },
+                        ticks: {
+                            color: textColor
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: gridColor
+                        },
+                        ticks: {
+                            color: textColor
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: textColor
+                        }
+                    }
+                }
+            }
+        };
+
         const accuracyCtx = document.getElementById(accuracyCanvasId).getContext('2d');
         const lossCtx = document.getElementById(lossCanvasId).getContext('2d');
         
@@ -57,11 +93,13 @@ class Visualization {
                 }]
             },
             options: {
-                responsive: true,
+                ...chartConfig.options,
                 plugins: {
+                    ...chartConfig.options.plugins,
                     title: {
                         display: true,
-                        text: 'Accuracy'
+                        text: 'Accuracy',
+                        color: textColor
                     },
                     tooltip: {
                         mode: 'index',
@@ -74,13 +112,15 @@ class Visualization {
                         max: 1,
                         title: {
                             display: true,
-                            text: 'Accuracy'
+                            text: 'Accuracy',
+                            color: textColor
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Epoch'
+                            text: 'Epoch',
+                            color: textColor
                         }
                     }
                 }
@@ -102,11 +142,13 @@ class Visualization {
                 }]
             },
             options: {
-                responsive: true,
+                ...chartConfig.options,
                 plugins: {
+                    ...chartConfig.options.plugins,
                     title: {
                         display: true,
-                        text: 'Loss'
+                        text: 'Loss',
+                        color: textColor
                     },
                     tooltip: {
                         mode: 'index',
@@ -118,13 +160,15 @@ class Visualization {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Loss'
+                            text: 'Loss',
+                            color: textColor
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Epoch'
+                            text: 'Epoch',
+                            color: textColor
                         }
                     }
                 }

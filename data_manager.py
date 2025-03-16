@@ -611,6 +611,33 @@ class DataManager:
             traceback.print_exc()
             raise RuntimeError(error_msg)
     
+    def import_dataset(self, file_path, dataset_name=None, metadata=None):
+        """
+        Import a dataset with existing metadata
+        
+        Args:
+            file_path (str): Path to the dataset file
+            dataset_name (str): Name for the dataset
+            metadata (dict): Existing metadata for the dataset
+        
+        Returns:
+            dict: Dataset information
+        """
+        # Load the dataset
+        dataset_info = self.load_dataset(file_path, dataset_name)
+        
+        if metadata:
+            # Update with existing metadata while preserving new file paths
+            metadata.update({
+                'raw_file': dataset_info['raw_file'],
+                'processed_file': dataset_info.get('processed_file'),
+                'split_files': dataset_info.get('split_files')
+            })
+            self.dataset_metadata[dataset_info['dataset_id']] = metadata
+            self._save_metadata()
+        
+        return dataset_info
+    
     def _save_metadata(self):
         """Save dataset metadata to file"""
         metadata_file = os.path.join(self.data_dir, "metadata.json")

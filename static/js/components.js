@@ -687,3 +687,258 @@ class ComponentFactory {
         return names[type] || `Unknown ${category}`;
     }
 }
+
+class ComponentConfigurator {
+    constructor() {
+        this.currentComponent = null;
+        this.modal = document.getElementById('component-config-modal');
+        this.form = document.getElementById('component-config-form');
+        this.saveButton = document.getElementById('save-component-config');
+        this.cancelButton = document.getElementById('cancel-component-config');
+        
+        this.initializeEventListeners();
+    }
+
+    initializeEventListeners() {
+        this.saveButton.addEventListener('click', () => this.saveConfiguration());
+        this.cancelButton.addEventListener('click', () => this.hideModal());
+        
+        // Close modal when clicking outside
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                this.hideModal();
+            }
+        });
+    }
+
+    showConfigurationModal(component) {
+        this.currentComponent = component;
+        this.form.innerHTML = this.generateConfigurationForm(component);
+        this.modal.style.display = 'block';
+        
+        // Initialize any special inputs (e.g., code editors, color pickers)
+        this.initializeSpecialInputs();
+    }
+
+    generateConfigurationForm(component) {
+        const config = this.getComponentConfig(component);
+        let html = '';
+
+        // Basic Information Section
+        html += `
+            <div class="config-section">
+                <h3>Basic Information</h3>
+                <div class="config-field">
+                    <label for="component-name">Name</label>
+                    <input type="text" id="component-name" value="${component.name}" />
+                </div>
+                <div class="config-field">
+                    <label for="component-description">Description</label>
+                    <textarea id="component-description">${component.description || ''}</textarea>
+                </div>
+            </div>
+        `;
+
+        // Parameters Section
+        html += `
+            <div class="config-section">
+                <h3>Parameters</h3>
+                ${this.generateParameterFields(config.parameters)}
+            </div>
+        `;
+
+        // Advanced Settings Section
+        if (config.advanced) {
+            html += `
+                <div class="config-section">
+                    <h3>Advanced Settings</h3>
+                    ${this.generateAdvancedFields(config.advanced)}
+                </div>
+            `;
+        }
+
+        return html;
+    }
+
+    getComponentConfig(component) {
+        // Define configuration based on component type
+        const configs = {
+            'dense': {
+                parameters: {
+                    units: {
+                        type: 'number',
+                        label: 'Units',
+                        value: component.params.units || 64,
+                        min: 1,
+                        help: 'Number of output units'
+                    },
+                    activation: {
+                        type: 'select',
+                        label: 'Activation Function',
+                        value: component.params.activation || 'relu',
+                        options: ['relu', 'sigmoid', 'tanh', 'linear'],
+                        help: 'Activation function to use'
+                    }
+                },
+                advanced: {
+                    useBias: {
+                        type: 'checkbox',
+                        label: 'Use Bias',
+                        value: component.params.useBias !== false,
+                        help: 'Whether to use a bias vector'
+                    }
+                }
+            },
+            'conv2d': {
+                parameters: {
+                    filters: {
+                        type: 'number',
+                        label: 'Filters',
+                        value: component.params.filters || 32,
+                        min: 1,
+                        help: 'Number of output filters'
+                    },
+                    kernelSize: {
+                        type: 'number',
+                        label: 'Kernel Size',
+                        value: component.params.kernelSize || 3,
+                        min: 1,
+                        help: 'Size of the convolution kernel'
+                    }
+                }
+            },
+            // Add more component configurations as needed
+        };
+
+        return configs[component.type] || { parameters: {} };
+    }
+
+    generateParameterFields(parameters) {
+        return Object.entries(parameters).map(([key, config]) => {
+            return this.generateField(key, config);
+        }).join('');
+    }
+
+    generateAdvancedFields(advanced) {
+        return Object.entries(advanced).map(([key, config]) => {
+            return this.generateField(key, config);
+        }).join('');
+    }
+
+    generateField(key, config) {
+        let input = '';
+        const id = `component-${key}`;
+
+        switch (config.type) {
+            case 'number':
+                input = `
+                    <input type="number" 
+                           id="${id}" 
+                           value="${config.value}"
+                           min="${config.min || ''}"
+                           max="${config.max || ''}"
+                           step="${config.step || 1}" />
+                `;
+                break;
+
+            case 'select':
+                input = `
+                    <select id="${id}">
+                        ${config.options.map(opt => `
+                            <option value="${opt}" ${opt === config.value ? 'selected' : ''}>
+                                ${opt}
+                            </option>
+                        `).join('')}
+                    </select>
+                `;
+                break;
+
+            case 'checkbox':
+                input = `
+                    <input type="checkbox" 
+                           id="${id}" 
+                           ${config.value ? 'checked' : ''} />
+                `;
+                break;
+
+            default:
+                input = `
+                    <input type="text" 
+                           id="${id}" 
+                           value="${config.value}" />
+                `;
+        }
+
+        return `
+            <div class="config-field">
+                <label for="${id}">${config.label}</label>
+                ${input}
+                ${config.help ? `<div class="help-text">${config.help}</div>` : ''}
+            </div>
+        `;
+    }
+
+    initializeSpecialInputs() {
+        // Initialize any special input types (e.g., code editors, color pickers)
+        // This can be extended based on needs
+    }
+
+    saveConfiguration() {
+        if (!this.currentComponent) return;
+
+        const config = this.getComponentConfig(this.currentComponent);
+        const newParams = {};
+
+        // Save basic information
+        this.currentComponent.name = document.getElementById('component-name').value;
+        this.currentComponent.description = document.getElementById('component-description').value;
+
+        // Save parameters
+        Object.keys(config.parameters).forEach(key => {
+            const element = document.getElementById(`component-${key}`);
+            if (element) {
+                newParams[key] = this.getElementValue(element);
+            }
+        });
+
+        // Save advanced settings
+        if (config.advanced) {
+            Object.keys(config.advanced).forEach(key => {
+                const element = document.getElementById(`component-${key}`);
+                if (element) {
+                    newParams[key] = this.getElementValue(element);
+                }
+            });
+        }
+
+        // Update component parameters
+        this.currentComponent.updateParameters(newParams);
+
+        // Trigger update event
+        const event = new CustomEvent('component-updated', {
+            detail: { component: this.currentComponent }
+        });
+        document.dispatchEvent(event);
+
+        this.hideModal();
+    }
+
+    getElementValue(element) {
+        switch (element.type) {
+            case 'checkbox':
+                return element.checked;
+            case 'number':
+                return parseFloat(element.value);
+            default:
+                return element.value;
+        }
+    }
+
+    hideModal() {
+        this.modal.style.display = 'none';
+        this.currentComponent = null;
+    }
+}
+
+// Initialize the configurator
+const componentConfigurator = new ComponentConfigurator();

@@ -373,9 +373,12 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {HTMLElement} componentElement - The component element
      */
     function showComponentConfiguration(componentElement) {
-        // Implementation for component configuration modal
-        // This would be a more detailed configuration interface than the properties panel
-        alert('Configuration modal not implemented yet.');
+        const componentId = componentElement.getAttribute('data-component-id');
+        const component = workflow.nodes.find(node => node.id === componentId);
+        
+        if (component) {
+            componentConfigurator.showConfigurationModal(component);
+        }
     }
     
     /**
@@ -450,13 +453,97 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Load project button
         document.getElementById('load-project').addEventListener('click', function() {
-            // This would typically open a file dialog
-            alert('Load project functionality not implemented yet.');
+            document.getElementById('project-file-input').click();
         });
+
+        document.getElementById('project-file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const projectData = JSON.parse(e.target.result);
+                    loadProjectData(projectData);
+                } catch (error) {
+                    showError('Failed to load project: Invalid file format');
+                }
+            };
+            reader.onerror = function() {
+                showError('Failed to read project file');
+            };
+            reader.readAsText(file);
+        });
+
+        function loadProjectData(projectData) {
+            try {
+                // Clear current workspace
+                clearWorkspace();
+
+                // Load workflow data
+                if (projectData.workflow) {
+                    workflowManager.importWorkflow(projectData.workflow);
+                }
+
+                // Load model registry data if exists
+                if (projectData.models) {
+                    fetch('/api/models/import', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ models: projectData.models })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            showError(data.message);
+                        }
+                    })
+                    .catch(error => showError('Failed to import models: ' + error.message));
+                }
+
+                // Load dataset information if exists
+                if (projectData.datasets) {
+                    fetch('/api/datasets/import', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ datasets: projectData.datasets })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            showError(data.message);
+                        }
+                    })
+                    .catch(error => showError('Failed to import datasets: ' + error.message));
+                }
+
+                showSuccess('Project loaded successfully');
+            } catch (error) {
+                showError('Failed to load project: ' + error.message);
+            }
+        }
+
+        function showError(message) {
+            // Implement error notification
+            console.error(message);
+            // You can use a toast notification library or custom implementation
+            alert(message);
+        }
+
+        function showSuccess(message) {
+            // Implement success notification
+            console.log(message);
+            // You can use a toast notification library or custom implementation
+            alert(message);
+        }
         
         // Export project button
         document.getElementById('export-project').addEventListener('click', function() {
-            exportProject();
+            showExportModal('project');
         });
         
         // Settings button
@@ -466,8 +553,34 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Help button
         document.getElementById('help').addEventListener('click', function() {
-            // This would typically show a help modal or documentation
-            alert('Help functionality not implemented yet.');
+            helpSystem.showHelpModal();
+        });
+        
+        // Help search input handler
+        document.getElementById('help-search').addEventListener('input', function(e) {
+            if (e.target.value.length >= 2) {
+                helpSystem.searchHelp(e.target.value);
+            } else if (e.target.value.length === 0) {
+                helpSystem.displayTopicsList();
+            }
+        });
+
+        // Close help modal when clicking the close button
+        document.querySelector('#help-modal .close').addEventListener('click', function() {
+            document.getElementById('help-modal').style.display = 'none';
+        });
+
+        // Close help modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('help-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Initialize tooltips when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            helpSystem.initializeTooltips();
         });
         
         // Canvas click (deselect components)
@@ -831,7 +944,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * Save settings
      */
     function saveSettings() {
-        settings = {
+        const settings = {
             theme: document.getElementById('theme-select').value,
             autosaveInterval: parseInt(document.getElementById('autosave-interval').value),
             executionTimeout: parseInt(document.getElementById('execution-timeout').value),
@@ -839,10 +952,14 @@ document.addEventListener('DOMContentLoaded', function() {
             autoConnect: document.getElementById('auto-connect').checked
         };
         
-        // Save to localStorage
+        // Apply theme immediately
+        document.documentElement.setAttribute('data-theme', settings.theme);
+        localStorage.setItem('theme', settings.theme);
+        
+        // Save all settings to localStorage
         localStorage.setItem('ml_sandbox_settings', JSON.stringify(settings));
         
-        // Apply settings
+        // Apply other settings
         applySettings();
     }
     
@@ -852,14 +969,18 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function loadSettings() {
         const savedSettings = localStorage.getItem('ml_sandbox_settings');
+        const savedTheme = localStorage.getItem('theme');
         
         if (savedSettings) {
-            return JSON.parse(savedSettings);
+            const settings = JSON.parse(savedSettings);
+            // Ensure theme is consistent with separate theme storage
+            settings.theme = savedTheme || settings.theme || 'light';
+            return settings;
         }
         
         // Default settings
         return {
-            theme: 'light',
+            theme: savedTheme || 'light',
             autosaveInterval: 5,
             executionTimeout: 300,
             showTooltips: true,
@@ -899,4 +1020,284 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.textContent = message;
         errorModal.style.display = 'block';
     }
+});
+
+class ExportManager {
+    constructor() {
+        this.supportedFormats = {
+            model: ['h5', 'savedmodel', 'onnx', 'pt'],
+            dataset: ['csv', 'json', 'pickle'],
+            workflow: ['json', 'py', 'yaml'],
+            project: ['json', 'zip']
+        };
+    }
+
+    async exportProject(format = 'json') {
+        try {
+            const projectData = await this.gatherProjectData();
+            
+            if (format === 'json') {
+                return this.exportAsJson('project', projectData);
+            } else if (format === 'zip') {
+                return this.exportAsZip(projectData);
+            }
+        } catch (error) {
+            console.error('Export failed:', error);
+            throw new Error(`Export failed: ${error.message}`);
+        }
+    }
+
+    async exportModel(modelId, format = 'savedmodel') {
+        try {
+            const response = await fetch(`/api/models/${modelId}/export?format=${format}`, {
+                method: 'POST'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Export failed: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            
+            if (format === 'savedmodel' || format === 'h5') {
+                // Download the model file
+                window.location.href = `/api/models/download/${result.exportPath}`;
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Model export failed:', error);
+            throw error;
+        }
+    }
+
+    async exportDataset(datasetId, format = 'csv') {
+        try {
+            const response = await fetch(`/api/datasets/${datasetId}/export?format=${format}`, {
+                method: 'POST'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Export failed: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            
+            // Trigger download
+            window.location.href = `/api/datasets/download/${result.exportPath}`;
+            
+            return result;
+        } catch (error) {
+            console.error('Dataset export failed:', error);
+            throw error;
+        }
+    }
+
+    async exportWorkflow(format = 'json') {
+        try {
+            const workflow = window.workflow.exportJson();
+            
+            if (format === 'json') {
+                return this.exportAsJson('workflow', workflow);
+            } else if (format === 'py') {
+                const pythonCode = window.workflow.exportPythonCode();
+                return this.exportAsFile('workflow', pythonCode, 'py');
+            } else if (format === 'yaml') {
+                const yamlContent = this.convertToYaml(workflow);
+                return this.exportAsFile('workflow', yamlContent, 'yaml');
+            }
+        } catch (error) {
+            console.error('Workflow export failed:', error);
+            throw error;
+        }
+    }
+
+    async gatherProjectData() {
+        // Gather all project components
+        return {
+            version: '1.0',
+            timestamp: new Date().toISOString(),
+            workflow: window.workflow.exportJson(),
+            models: await this.getModelsList(),
+            datasets: await this.getDatasetsList(),
+            settings: window.settings.export(),
+            metadata: {
+                created: new Date().toISOString(),
+                lastModified: new Date().toISOString()
+            }
+        };
+    }
+
+    async getModelsList() {
+        const response = await fetch('/api/models');
+        return await response.json();
+    }
+
+    async getDatasetsList() {
+        const response = await fetch('/api/datasets');
+        return await response.json();
+    }
+
+    exportAsJson(type, data) {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `ml_sandbox_${type}_${timestamp}.json`;
+        const jsonStr = JSON.stringify(data, null, 2);
+        
+        this.downloadFile(filename, jsonStr, 'application/json');
+        return { filename, size: jsonStr.length };
+    }
+
+    exportAsFile(type, content, extension) {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `ml_sandbox_${type}_${timestamp}.${extension}`;
+        
+        this.downloadFile(filename, content, 'text/plain');
+        return { filename, size: content.length };
+    }
+
+    async exportAsZip(data) {
+        const zip = new JSZip();
+
+        // Add project configuration
+        zip.file('project.json', JSON.stringify(data, null, 2));
+
+        // Add workflow
+        zip.file('workflow/workflow.json', JSON.stringify(data.workflow, null, 2));
+        zip.file('workflow/workflow.py', window.workflow.exportPythonCode());
+
+        // Add models metadata
+        zip.file('models/models.json', JSON.stringify(data.models, null, 2));
+
+        // Add datasets metadata
+        zip.file('datasets/datasets.json', JSON.stringify(data.datasets, null, 2));
+
+        // Add settings
+        zip.file('settings.json', JSON.stringify(data.settings, null, 2));
+
+        // Generate zip file
+        const content = await zip.generateAsync({ type: 'blob' });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `ml_sandbox_project_${timestamp}.zip`;
+        
+        this.downloadFile(filename, content, 'application/zip');
+        return { filename, size: content.size };
+    }
+
+    downloadFile(filename, content, type) {
+        const blob = new Blob([content], { type });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }
+
+    convertToYaml(data) {
+        return jsyaml.dump(data);
+    }
+}
+
+// Initialize export manager
+const exportManager = new ExportManager();
+
+// Export functionality
+async function showExportModal(type) {
+    const modal = document.getElementById('export-modal');
+    const formatSelect = document.getElementById('export-format');
+    const titleSpan = document.getElementById('export-type-title');
+    const exportButton = document.getElementById('export-button');
+    
+    // Clear previous options
+    formatSelect.innerHTML = '';
+    
+    // Set title
+    titleSpan.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+    
+    // Populate format options based on type
+    const formats = exportManager.supportedFormats[type];
+    formats.forEach(format => {
+        const option = document.createElement('option');
+        option.value = format;
+        option.textContent = format.toUpperCase();
+        formatSelect.appendChild(option);
+    });
+    
+    // Update modal theme
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    modal.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    
+    modal.style.display = 'block';
+}
+
+function hideExportModal() {
+    const modal = document.getElementById('export-modal');
+    modal.style.display = 'none';
+}
+
+// Add event listener for modal close button
+document.querySelector('.modal .close').onclick = hideExportModal;
+
+function showNotification(type, message) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
+}
+
+// Initialize export options
+async function initializeExportOptions() {
+    try {
+        // Fetch models
+        const modelsResponse = await fetch('/api/models');
+        const models = await modelsResponse.json();
+        const modelSelect = document.getElementById('selected-model');
+        modelSelect.innerHTML = '';
+        models.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.id;
+            option.textContent = model.name;
+            modelSelect.appendChild(option);
+        });
+
+        // Fetch datasets
+        const datasetsResponse = await fetch('/api/datasets');
+        const datasets = await datasetsResponse.json();
+        const datasetSelect = document.getElementById('selected-dataset');
+        datasetSelect.innerHTML = '';
+        datasets.forEach(dataset => {
+            const option = document.createElement('option');
+            option.value = dataset.id;
+            option.textContent = dataset.name;
+            datasetSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error initializing export options:', error);
+        showNotification('error', 'Failed to load export options');
+    }
+}
+
+// Call initialization when page loads
+document.addEventListener('DOMContentLoaded', initializeExportOptions);
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    if (document.getElementById('theme-select')) {
+        document.getElementById('theme-select').value = theme;
+    }
+});
+
+// Add theme change listener
+document.addEventListener('theme-changed', function(e) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.setAttribute('data-theme', e.detail.theme);
+    });
 });

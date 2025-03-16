@@ -10,11 +10,14 @@ class UI {
      */
     constructor(options = {}) {
         this.options = {
-            theme: 'light',
+            theme: localStorage.getItem('theme') || 'light',
             showTooltips: true,
             autoConnect: true,
             ...options
         };
+        
+        // Initialize theme
+        this.applyTheme(this.options.theme);
         
         // DOM elements
         this.elements = {
@@ -34,8 +37,17 @@ class UI {
             executionStats: document.getElementById('execution-stats'),
             executionStatus: document.getElementById('execution-status'),
             executionTime: document.getElementById('execution-time'),
-            memoryUsage: document.getElementById('memory-usage')
+            memoryUsage: document.getElementById('memory-usage'),
+            themeSelect: document.getElementById('theme-select')
         };
+        
+        // Initialize theme selector
+        if (this.elements.themeSelect) {
+            this.elements.themeSelect.value = this.options.theme;
+            this.elements.themeSelect.addEventListener('change', (e) => {
+                this.applyTheme(e.target.value);
+            });
+        }
         
         // State
         this.selectedComponent = null;
@@ -44,7 +56,6 @@ class UI {
         
         // Initialize
         this.initializeEventListeners();
-        this.applyTheme(this.options.theme);
     }
     
     /**
@@ -420,9 +431,51 @@ class UI {
      * @param {string} theme - The theme name
      */
     applyTheme(theme) {
-        document.body.className = theme;
+        // Save theme preference
+        localStorage.setItem('theme', theme);
+        this.options.theme = theme;
+        
+        // Apply theme to document
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Update theme select if it exists
+        if (this.elements.themeSelect) {
+            this.elements.themeSelect.value = theme;
+        }
+        
+        // Dispatch theme change event
+        const event = new CustomEvent('theme-changed', {
+            detail: { theme }
+        });
+        document.dispatchEvent(event);
     }
 }
 
 // Export the UI class
 window.UI = UI;
+
+// Add to your existing UI class or as a separate script
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+
+    // Toggle dropdown
+    dropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.matches('.dropdown-toggle') && !e.target.closest('.dropdown-menu')) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    dropdownMenu.addEventListener('click', function(e) {
+        if (e.target.matches('.dropdown-item')) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+});

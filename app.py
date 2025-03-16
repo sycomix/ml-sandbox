@@ -501,6 +501,64 @@ def compare_models():
             'error_details': error_info
         }), 500
 
+@app.route('/api/models/import', methods=['POST'])
+def import_models():
+    """Import models into the registry."""
+    try:
+        models_data = request.json.get('models', [])
+        imported_models = []
+        
+        for model_data in models_data:
+            model_info = model_registry.import_model(
+                model_path=model_data.get('model_path'),
+                framework=model_data.get('framework'),
+                name=model_data.get('name'),
+                description=model_data.get('description'),
+                tags=model_data.get('tags')
+            )
+            imported_models.append(model_info)
+            
+        return jsonify({
+            'status': 'success',
+            'message': f'Successfully imported {len(imported_models)} models',
+            'models': imported_models
+        })
+    except Exception as e:
+        error_info = error_handler.handle_exception(e, component='import_models')
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'error_details': error_info
+        }), 500
+
+@app.route('/api/datasets/import', methods=['POST'])
+def import_datasets():
+    """Import datasets into the data manager."""
+    try:
+        datasets_data = request.json.get('datasets', [])
+        imported_datasets = []
+        
+        for dataset_data in datasets_data:
+            dataset_info = data_manager.import_dataset(
+                file_path=dataset_data.get('file_path'),
+                dataset_name=dataset_data.get('name'),
+                metadata=dataset_data.get('metadata')
+            )
+            imported_datasets.append(dataset_info)
+            
+        return jsonify({
+            'status': 'success',
+            'message': f'Successfully imported {len(imported_datasets)} datasets',
+            'datasets': imported_datasets
+        })
+    except Exception as e:
+        error_info = error_handler.handle_exception(e, component='import_datasets')
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'error_details': error_info
+        }), 500
+
 # Error Handling Routes
 @app.route('/api/errors', methods=['GET'])
 def get_errors():
@@ -551,6 +609,74 @@ def handle_execution_progress(data):
         'current_step': data.get('current_step'),
         'timestamp': datetime.now().isoformat()
     })
+
+@app.route('/api/models/<model_id>/export', methods=['POST'])
+def export_model(model_id):
+    """Export a model in the specified format."""
+    try:
+        export_format = request.args.get('format', 'savedmodel')
+        export_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'exports')
+        os.makedirs(export_dir, exist_ok=True)
+        
+        export_path = model_registry.export_model(
+            model_id=model_id,
+            export_dir=export_dir,
+            format=export_format
+        )
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Model exported successfully',
+            'exportPath': export_path
+        })
+    except Exception as e:
+        error_info = error_handler.handle_exception(e, component='export_model')
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'error_details': error_info
+        }), 500
+
+@app.route('/api/datasets/<dataset_id>/export', methods=['POST'])
+def export_dataset(dataset_id):
+    """Export a dataset in the specified format."""
+    try:
+        export_format = request.args.get('format', 'csv')
+        export_path = data_manager.export_dataset(
+            dataset_id=dataset_id,
+            format=export_format
+        )
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Dataset exported successfully',
+            'exportPath': export_path
+        })
+    except Exception as e:
+        error_info = error_handler.handle_exception(e, component='export_dataset')
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'error_details': error_info
+        }), 500
+
+@app.route('/api/models/download/<path:filename>')
+def download_model(filename):
+    """Download an exported model file."""
+    return send_from_directory(
+        os.path.join(app.config['UPLOAD_FOLDER'], 'exports'),
+        filename,
+        as_attachment=True
+    )
+
+@app.route('/api/datasets/download/<path:filename>')
+def download_dataset(filename):
+    """Download an exported dataset file."""
+    return send_from_directory(
+        os.path.join(app.config['UPLOAD_FOLDER'], 'exports'),
+        filename,
+        as_attachment=True
+    )
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0')

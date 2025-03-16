@@ -419,41 +419,20 @@ class ModelRegistry:
     
     def import_model(self, model_path, framework, name, description="", tags=None):
         """
-        Import a model into the registry
+        Import a model with existing metadata
         
         Args:
-            model_path (str): Path to the model
+            model_path (str): Path to the model file
             framework (str): Model framework ('tensorflow' or 'pytorch')
             name (str): Model name
             description (str): Model description
             tags (list): List of tags
-            
+        
         Returns:
-            dict: Imported model information
+            dict: Model information
         """
-        # Validate framework
-        if framework not in ["tensorflow", "pytorch"]:
-            raise ValueError("Framework must be 'tensorflow' or 'pytorch'")
-        
-        # Load model
-        try:
-            if framework == "tensorflow":
-                model = tf.keras.models.load_model(model_path)
-            elif framework == "pytorch":
-                # For PyTorch, we just verify the file exists
-                if not os.path.exists(model_path):
-                    raise FileNotFoundError(f"Model file not found: {model_path}")
-                model = model_path  # Just use the path for registration
-            else:
-                raise ValueError(f"Unsupported framework: {framework}")
-        except Exception as e:
-            error_msg = f"Error importing model: {str(e)}"
-            traceback.print_exc()
-            raise RuntimeError(error_msg)
-        
-        # Register model
         return self.register_model(
-            model=model,
+            model=model_path,  # For PyTorch models, we just need the path
             framework=framework,
             name=name,
             description=description,
