@@ -1,0 +1,3 @@
+2025-03-16 02:45:10,614 - ml_sandbox.error_handler - INFO - Error handler initialized
+2025-03-16 02:45:10,626 - werkzeug - WARNING - WebSocket transport not available. Install simple-websocket for improved performance.
+2025-03-16 02:45:10,628 - werkzeug - INFO -  * Restarting with stat

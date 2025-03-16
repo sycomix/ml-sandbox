@@ -1,0 +1,81 @@
+2025-03-16 02:27:51,448 - ml_sandbox.error_handler - INFO - Error handler initialized
+2025-03-16 02:27:51,460 - werkzeug - WARNING - WebSocket transport not available. Install simple-websocket for improved performance.
+2025-03-16 02:27:51,460 - werkzeug - WARNING -  * Debugger is active!
+2025-03-16 02:27:51,484 - werkzeug - INFO -  * Debugger PIN: 140-030-738
+2025-03-16 02:27:52,946 - werkzeug - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-03-16 02:27:52,947 - werkzeug - INFO -  * Running on http://192.168.1.209:5000/ (Press CTRL+C to quit)
+2025-03-16 02:27:57,868 - engineio.server - ERROR - The WebSocket transport is not available, you must install a WebSocket server that is compatible with your async mode to enable it. See the documentation for details. (further occurrences of this error will be logged with level INFO)
+2025-03-16 02:27:57,869 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:57] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZEf HTTP/1.1" 200 -
+2025-03-16 02:27:57,877 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:57] "POST /socket.io/?EIO=4&transport=polling&t=PMTsZEn&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:27:57,877 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:57] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZEn.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:27:58,074 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:58] "GET / HTTP/1.1" 200 -
+2025-03-16 02:27:59,167 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-03-16 02:27:59,167 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "[36mGET /static/js/ui.js HTTP/1.1[0m" 304 -
+2025-03-16 02:27:59,169 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "GET /static/css/styles.css HTTP/1.1" 200 -
+2025-03-16 02:27:59,172 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "[36mGET /static/js/visualization.js HTTP/1.1[0m" 304 -
+2025-03-16 02:27:59,178 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "[36mGET /static/js/components.js HTTP/1.1[0m" 304 -
+2025-03-16 02:27:59,179 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "[36mGET /static/js/workflow.js HTTP/1.1[0m" 304 -
+2025-03-16 02:27:59,197 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZZQ HTTP/1.1" 200 -
+2025-03-16 02:27:59,198 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "GET /api/components HTTP/1.1" 200 -
+2025-03-16 02:27:59,235 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "POST /socket.io/?EIO=4&transport=polling&t=PMTsZZ_&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:27:59,237 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:27:59] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZa0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:28:22,880 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:22] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZEu&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:28:22,887 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:22] "POST /socket.io/?EIO=4&transport=polling&t=PMTsfLa&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:28:24,209 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:24] "GET /socket.io/?EIO=4&transport=polling&t=PMTsZa8&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:28:24,215 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:24] "POST /socket.io/?EIO=4&transport=polling&t=PMTsfgK&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:28:47,893 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:47] "GET /socket.io/?EIO=4&transport=polling&t=PMTsfLa.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:28:47,900 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:47] "POST /socket.io/?EIO=4&transport=polling&t=PMTslSP&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:28:49,218 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:49] "GET /socket.io/?EIO=4&transport=polling&t=PMTsfgK.0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:28:49,229 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:28:49] "POST /socket.io/?EIO=4&transport=polling&t=PMTsln6&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:29:12,902 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:12] "GET /socket.io/?EIO=4&transport=polling&t=PMTslSP.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:29:12,910 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:12] "POST /socket.io/?EIO=4&transport=polling&t=PMTsrZA&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:29:14,237 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:14] "GET /socket.io/?EIO=4&transport=polling&t=PMTsln6.0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:29:14,243 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:14] "POST /socket.io/?EIO=4&transport=polling&t=PMTsru1&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:29:37,915 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:37] "GET /socket.io/?EIO=4&transport=polling&t=PMTsrZB&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:29:37,923 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:37] "POST /socket.io/?EIO=4&transport=polling&t=PMTsxg0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:29:39,258 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:39] "GET /socket.io/?EIO=4&transport=polling&t=PMTsru1.0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:29:39,265 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:39] "POST /socket.io/?EIO=4&transport=polling&t=PMTsx-z&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Missing required field: id
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Missing required field: name
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Nodes must be an object
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 0 references non-existent source node: image_loader-0
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 0 references non-existent target node: standard_scaler-1
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 1 references non-existent source node: image_loader-0
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 1 references non-existent target node: standard_scaler-1
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 2 references non-existent source node: standard_scaler-1
+2025-03-16 02:29:59,497 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 2 references non-existent target node: accuracy-2
+2025-03-16 02:29:59,498 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 3 references non-existent source node: standard_scaler-1
+2025-03-16 02:29:59,498 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 3 references non-existent target node: accuracy-2
+2025-03-16 02:29:59,498 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 4 references non-existent source node: standard_scaler-1
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 4 references non-existent target node: accuracy-2
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 5 references non-existent source node: accuracy-2
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 5 references non-existent target node: confusion_matrix-3
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 6 references non-existent source node: accuracy-2
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 6 references non-existent target node: confusion_matrix-3
+2025-03-16 02:29:59,499 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 7 references non-existent source node: accuracy-2
+2025-03-16 02:29:59,500 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 7 references non-existent target node: confusion_matrix-3
+2025-03-16 02:29:59,500 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 8 references non-existent source node: accuracy-2
+2025-03-16 02:29:59,500 - ml_sandbox.error_handler - ERROR - Workflow validation error: Connection 8 references non-existent target node: confusion_matrix-3
+2025-03-16 02:29:59,500 - ml_sandbox.error_handler - ERROR - Workflow validation error: Workflow contains cycles: unhashable type: 'dict'
+2025-03-16 02:29:59,501 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:29:59] "[31m[1mPOST /api/execute HTTP/1.1[0m" 400 -
+2025-03-16 02:30:02,924 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:02] "GET /socket.io/?EIO=4&transport=polling&t=PMTsxg0.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:02,930 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:02] "POST /socket.io/?EIO=4&transport=polling&t=PMTt1mm&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:04,274 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:04] "GET /socket.io/?EIO=4&transport=polling&t=PMTsx--&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:30:04,280 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:04] "POST /socket.io/?EIO=4&transport=polling&t=PMTt25r&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:30:27,943 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:27] "GET /socket.io/?EIO=4&transport=polling&t=PMTt1mm.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:27,951 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:27] "POST /socket.io/?EIO=4&transport=polling&t=PMTt7ti&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:29,282 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:29] "GET /socket.io/?EIO=4&transport=polling&t=PMTt25s&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:30:29,288 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:29] "POST /socket.io/?EIO=4&transport=polling&t=PMTt8Cb&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:30:52,962 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:52] "GET /socket.io/?EIO=4&transport=polling&t=PMTt7ti.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:52,969 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:52] "POST /socket.io/?EIO=4&transport=polling&t=PMTtD-c&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:30:54,299 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:54] "GET /socket.io/?EIO=4&transport=polling&t=PMTt8Cb.0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:30:54,304 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:30:54] "POST /socket.io/?EIO=4&transport=polling&t=PMTtEJU&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:31:17,983 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:17] "GET /socket.io/?EIO=4&transport=polling&t=PMTtD-c.0&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:31:17,990 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:17] "POST /socket.io/?EIO=4&transport=polling&t=PMTtK5Z&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:31:19,320 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:19] "GET /socket.io/?EIO=4&transport=polling&t=PMTtEJU.0&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:31:19,327 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:19] "POST /socket.io/?EIO=4&transport=polling&t=PMTtKQR&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:31:43,000 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:43] "GET /socket.io/?EIO=4&transport=polling&t=PMTtK5a&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:31:43,007 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:43] "POST /socket.io/?EIO=4&transport=polling&t=PMTtQCS&sid=EezPQFsCM_Q3FZcWAAAA HTTP/1.1" 200 -
+2025-03-16 02:31:44,333 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:44] "GET /socket.io/?EIO=4&transport=polling&t=PMTtKQS&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -
+2025-03-16 02:31:44,339 - werkzeug - INFO - 192.168.1.209 - - [16/Mar/2025 02:31:44] "POST /socket.io/?EIO=4&transport=polling&t=PMTtQXG&sid=zHMW9VwX63urn479AAAC HTTP/1.1" 200 -

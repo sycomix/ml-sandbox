@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Sandbox - Interactive AI/ML Development Environment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.6/js/jsplumb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>ML Sandbox</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" id="new-project"><i class="fas fa-file"></i> New</a></li>
+                <li><a href="#" id="save-project"><i class="fas fa-save"></i> Save</a></li>
+                <li><a href="#" id="load-project"><i class="fas fa-folder-open"></i> Load</a></li>
+                <li><a href="#" id="export-project"><i class="fas fa-file-export"></i> Export</a></li>
+                <li><a href="#" id="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" id="help"><i class="fas fa-question-circle"></i> Help</a></li>
+            </ul>
+        </nav>
+        <div class="user-controls">
+            <button id="run-workflow" class="btn btn-primary"><i class="fas fa-play"></i> Run</button>
+            <button id="stop-workflow" class="btn btn-danger" disabled><i class="fas fa-stop"></i> Stop</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <div class="components-search">
+                <input type="text" id="search-components" placeholder="Search components...">
+            </div>
+            <div class="component-categories">
+                <div class="category active" data-category="layers">Layers</div>
+                <div class="category" data-category="activations">Activations</div>
+                <div class="category" data-category="optimizers">Optimizers</div>
+                <div class="category" data-category="losses">Losses</div>
+                <div class="category" data-category="data">Data</div>
+                <div class="category" data-category="preprocessing">Preprocessing</div>
+                <div class="category" data-category="evaluation">Evaluation</div>
+                <div class="category" data-category="visualization">Visualization</div>
+            </div>
+            <div class="components-list" id="components-container">
+                <!-- Components will be loaded here dynamically -->
+            </div>
+        </div>
+
+        <div class="workspace">
+            <div class="canvas" id="canvas">
+                <!-- ML components will be placed here -->
+            </div>
+        </div>
+
+        <div class="properties-panel">
+            <h3>Properties</h3>
+            <div id="properties-content">
+                <p class="no-selection">No component selected</p>
+            </div>
+            <div class="execution-stats" id="execution-stats" style="display: none;">
+                <h3>Execution Statistics</h3>
+                <div class="stat">
+                    <span>Status:</span>
+                    <span id="execution-status">Idle</span>
+                </div>
+                <div class="stat">
+                    <span>Execution Time:</span>
+                    <span id="execution-time">0s</span>
+                </div>
+                <div class="stat">
+                    <span>Memory Usage:</span>
+                    <span id="memory-usage">0 MB</span>
+                </div>
+                <div class="charts">
+                    <canvas id="accuracy-chart"></canvas>
+                    <canvas id="loss-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="error-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Error</h2>
+            <div id="error-message"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="theme-select">Theme</label>
+                    <select id="theme-select">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="autosave-interval">Autosave Interval (minutes)</label>
+                    <input type="number" id="autosave-interval" min="1" max="60" value="5">
+                </div>
+                <div class="form-group">
+                    <label for="execution-timeout">Execution Timeout (seconds)</label>
+                    <input type="number" id="execution-timeout" min="10" max="3600" value="300">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="show-tooltips" checked>
+                        Show Tooltips
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-connect" checked>
+                        Auto-Connect Compatible Nodes
+                    </label>
+                </div>
+                <button id="save-settings" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="component-info-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="component-info-title"></h2>
+            <div id="component-info-content"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workflow.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
+</body>
+</html>
